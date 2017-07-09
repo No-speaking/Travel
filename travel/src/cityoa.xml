@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+
+
+<package name="base" namespace="/travelling" extends="struts-default">
+       <interceptors>
+      		 <interceptor name="login" class="LoginCheckInteceptor"/>
+            <interceptor name="homePage" class="HomePageAccessCountInterceptor"/>
+            <interceptor name="ipCheck" class="IPCheckInterceptor"/>
+             <interceptor-stack name="cityoaStack">
+                <interceptor-ref name="defaultStack"/>
+                <interceptor-ref name="ipCheck"/>
+                <interceptor-ref name="homePage"/>
+                 <interceptor-ref name="login"/> 
+ 			</interceptor-stack>
+ 
+	   </interceptors>
+       
+        <default-interceptor-ref name="cityoaStack"/>
+        
+        <global-results>
+       	   <result name="login" type="redirect">
+              <param name="location">/travelling/page-login.jsp</param>
+           </result>
+             <result name="error" type="redirect">
+              <param name="location">/travelling/error.jsp</param>
+           </result>
+     
+       </global-results>
+        <global-exception-mappings>
+           	<exception-mapping exception="java.lang.Exception" result="error" />
+           	<!-- <exception-mapping exception="java.sql.SQLException" result="error" /> -->
+           	
+        </global-exception-mappings>
+      
+        
+        
+    </package>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 用户登录 -->
+<package name="login" namespace="/travelling" extends="base">
+		<action name="login" class="userLoginController" method="login">
+			<result name="success" type="redirect">/travelling/index.jsp</result>
+			<result name="failure">/travelling/page-login.jsp</result>
+			<interceptor-ref name="defaultStack"/>
+		</action>
+	</package>
+
+
+<!-- 用户的前分发 -->
+	<package name="userFront" namespace="/travelling" extends="base">
+		<!-- 显示订单页面点击查看按钮跳转到单个订单查看页面 -->
+		<action name="toviewuser" class="userFrontController" method="toview">
+			<result name="toview">/travelling/profile.jsp</result>
+		</action>
+	</package>
+
+
+
+
+
+	<!-- 用户的后处理 -->
+     <package name="userProcess" namespace="/travelling" extends="base">
+		<action name="adduser" class="userProcessController" method="adduser">
+			<result name="success">/travelling/page-login.jsp</result>
+			<interceptor-ref name="defaultStack"/>
+		</action>
+		<action name="modifyuser" class="userProcessController" method="modifyuser">
+			<result name="success">/travelling/profile.jsp</result>
+		</action>
+		<!-- 显示用户图片-->
+		<action name="showuser" class="userPhotoShowAction" method="showuser">
+			<result name="success" type="stream">
+			    <param name="contentType">${um.phtype}</param>
+			    <param name="inputName">inputStream</param>
+			    <param name="contentDisposition">attachment;filename=${um.phname}</param>
+			</result>
+
+		</action>
+		<!-- 
+		<action name="modifyroad" class="userProcessController" method="modify">
+			<result name="success" type="redirect">tomainroad.action</result>
+		</action>
+		
+		<action name="deleteroad" class="userProcessController" method="delete">
+			<result name="success" type="redirect">tomainroad.action</result>
+		</action> -->
+	</package>
+
+
+
+
+
+
+	<!-- 在添加路线的页面上显示景点信息 -->
+    <package name="scenictoviewtoaddroute" namespace="/travelling" extends="base">
+		<action name="scenictoview" class="routeFrontController" method="scenictoview">
+			<result name="success">/travelling/roadadd.jsp</result>
+		</action>
+		<!-- 在添加路线信息 -->
+		<action name="addroute" class="routeProcessController" method="add">
+			<result name="success" type="redirect">/travelling/scenictoview.action</result>
+		</action>
+	</package>
+	
+	<!-- 路线的前分发 -->
+	<package name="routeFront" namespace="/travelling" extends="base">
+		<!-- 显示路线页面点击查看按钮跳转到单个路线查看页面 -->
+		<action name="toviewroad" class="routeFrontController" method="toview">
+			<result name="toview">/travelling/roadlooklook.jsp</result>
+		</action>
+		<action name="tomainroad" class="routeFrontController" method="tomain">
+			<result name="success">/travelling/roadlook.jsp</result>
+		</action>
+		<action name="tomodifyroad" class="routeFrontController" method="tomodify">
+			<result name="tomodify">/travelling/roadedit.jsp</result>
+		</action>
+		<action name="todeleteroad" class="routeFrontController" method="todelete">
+			<result name="todelete">/travelling/roaddel.jsp</result>
+		</action>
+		<action name="toaddroad" class="routeFrontController" method="toadd">
+			<result name="toadd">/travelling/roadadd.jsp</result>
+		</action>
+		<!-- 访问tomain.action跳转到路线显示页面 
+		<action name="tomainroad" class="routeFrontController" method="tomain">
+			
+		</action>-->
+	</package>
+	<!-- 路线的后处理 -->
+     <package name="roadProcess" namespace="/travelling" extends="base">
+		
+		<!--  -->
+		<action name="modifyroad" class="routeProcessController" method="modify">
+			<result name="success" type="redirect">tomainroad.action</result>
+		</action>
+		<!--  -->
+		<action name="deleteroad" class="routeProcessController" method="delete">
+			<result name="success" type="redirect">tomainroad.action</result>
+		</action>
+	</package>
+	
+	
+	
+	<!-- 订单的前分发 -->
+	<package name="orderFront" namespace="/travelling" extends="base">
+		<!-- 显示订单页面点击查看按钮跳转到单个订单查看页面 -->
+		<action name="tovieworder" class="ordersFrontController" method="toview">
+			<result name="toview">/travelling/orderlooklook.jsp</result>
+		</action>
+		<action name="tomainorder" class="ordersFrontController" method="tomain">
+			<result name="success">/travelling/orderlook.jsp</result>
+		</action>
+		<action name="tomodifyorder" class="ordersFrontController" method="tomodify">
+			<result name="tomodify">/travelling/orderedit.jsp</result>
+		</action>
+		<action name="todeleteorder" class="ordersFrontController" method="todelete">
+			<result name="todelete">/travelling/orderdel.jsp</result>
+		</action>
+		<action name="toaddorder" class="ordersFrontController" method="toadd">
+			<result name="toadd">/travelling/orderadd.jsp</result>
+		</action>
+		<action name="routetoview" class="ordersFrontController" method="routetoview">
+			<result name="success">/travelling/orderadd.jsp</result>
+		</action>
+	</package>
+	<!-- 订单的后处理 -->
+     <package name="orderProcess" namespace="/travelling" extends="base">
+		<action name="addorder" class="ordersProcessController" method="add">
+			<result name="success" type="redirect">tomainorder.action</result>
+			<result name="input" type="chain">
+				<param name="namespace">/travelling</param>
+				<param name="actionName">routetoview</param>
+			</result>
+		</action>
+		<!--  -->
+		<action name="modifyorder" class="ordersProcessController" method="modify">
+			<result name="success" type="redirect">tomainorder.action</result>
+		</action>
+		<!--  -->
+		<action name="deleteorder" class="ordersProcessController" method="delete">
+			<result name="success" type="redirect">tomainorder.action</result>
+		</action>
+	</package>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<!-- 景点的前分发 -->
+	<package name="scenicFront" namespace="/travelling" extends="base">
+		<!-- 显示景点页面点击查看按钮跳转到单个景点查看页面 -->
+		<action name="toview" class="scenicSpotFrontController" method="toview">
+			<result name="toview">/travelling/scenicspotslooklook.jsp</result>
+		</action>
+		<action name="tomodify" class="scenicSpotFrontController" method="tomodify">
+			<result name="tomodify">/travelling/scenicspotsedit.jsp</result>
+		</action>
+		<action name="todelete" class="scenicSpotFrontController" method="todelete">
+			<result name="todelete">/travelling/scenicspotsdel.jsp</result>
+		</action>
+		<action name="toadd" class="scenicSpotFrontController" method="toadd">
+			<result name="toadd">/travelling/scenicspotsadd.jsp</result>
+		</action>
+		<!-- 访问tomain.action跳转到景点显示页面 -->
+		<action name="tomain" class="scenicSpotFrontController" method="tomain">
+			<result name="success">/travelling/scenicspotslook.jsp</result>
+		</action>
+	</package>
+	<!-- 景点的后处理 -->
+     <package name="scenicProcess" namespace="/travelling" extends="base">
+		<action name="addscenic" class="sceincSpotProcessController" method="add">
+			<result name="success" type="redirect">tomain.action</result>
+			<result name="input" type="chain">
+				<param name="namespace">/travelling</param>
+				<param name="actionName">toadd</param>
+			</result>
+		</action>
+		<!-- 显示景点图片-->
+		<action name="show" class="scenicSpotPhotoShowAction" method="show">
+			<result name="success" type="stream">
+			    <param name="contentType">${sm.phtype}</param>
+			    <param name="inputName">inputStream</param>
+			    <param name="contentDisposition">attachment;filename=${sm.phname}</param>
+			</result>
+
+		</action>
+		<!--  -->
+		<action name="modifyscenic" class="sceincSpotProcessController" method="modify">
+			<result name="success" type="redirect">tomain.action</result>
+		</action>
+		<!--  -->
+		<action name="deletescenic" class="sceincSpotProcessController" method="delete">
+			<result name="success" type="redirect">tomain.action</result>
+		</action>
+		 
+	</package>
+	<!-- 显示景点图片
+	<package name="show" namespace="/travelling" extends="base">
+		<action name="show" class="scenicSpotPhotoShowAction" method="show">
+			<result name="success" type="stream">
+			    <param name="contentType">${sm.phtype}</param>
+			    <param name="inputName">inputStream</param>
+			    <param name="contentDisposition">attachment;filename=${sm.phname}</param>
+			</result>
+
+		</action>
+	</package> -->
+
+		
+	
+
+
+</struts>

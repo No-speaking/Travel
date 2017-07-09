@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE validators PUBLIC
+        "-//Apache Struts//XWork Validator 1.0.2//EN"
+        "http://struts.apache.org/dtds/xwork-validator-1.0.2.dtd">
+
+<validators>
+      <field name="om.ordersname">
+        <field-validator type="requiredstring">
+            <message >姓名为空！</message>
+        </field-validator>
+    </field>
+    <field name="om.ordersid">
+        <field-validator type="requiredstring">
+            <message>身份证号为空！</message>
+        </field-validator>
+            
+    </field>
+    <field name="om.orderstell">
+        <field-validator type="requiredstring">
+            <message>电话为空！</message>
+        </field-validator>
+       
+        
+        
+    </field>
+     <!--  <field name="om.orderdate">
+        <field-validator type="requiredstring">
+            <message>时间为空！</message>
+        </field-validator>
+       
+      
+        
+    </field>   -->
+    
+    <field name="om.ordersprice">
+        <field-validator type="required">
+            <message>价格不为空</message>
+        </field-validator>
+        <field-validator type="double">
+            <param name="minExclusive">0</param>
+            <param name="maxExclusive">10000</param>
+            <message>价格必须为数值，且在0-10000之内！</message>
+        </field-validator>
+        
+        
+    </field>
+   
+    
+     
+    
+</validators>

@@ -1,0 +1,34 @@
+<!DOCTYPE validators PUBLIC
+        "-//Apache Struts//XWork Validator 1.0.2//EN"
+        "http://struts.apache.org/dtds/xwork-validator-1.0.2.dtd">
+
+<validators>
+    <field name="sm.scenicname">
+        <field-validator type="requiredstring">
+            <message >用户名为空！</message>
+        </field-validator>
+    </field>
+    <field name="sm.scenicintr">
+        <field-validator type="requiredstring">
+            <message>密码为空！</message>
+        </field-validator>   
+    </field>
+      <field name="sm.scenictime">
+        <field-validator type="requiredstring">
+            <message>营业时间为空！</message>
+        </field-validator>   
+        
+    </field>
+    <field name="sm.scenicticket">
+        <field-validator type="required">
+            <message>门票不能为空！</message>
+        </field-validator>
+        <field-validator type="double">
+            <param name="minExclusive">0</param>
+            <param name="maxExclusive">10000</param>
+            <message>门票必须为数值，且在0-10000之内！</message>
+        </field-validator>
+        
+        
+    </field>
+</validators>
